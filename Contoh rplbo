@@ -1,0 +1,162 @@
+// File: Character.java
+
+public interface Character {
+    public void showCharacterInfo();
+    public boolean attacked(int damage);
+}
+
+// File: PhysicalCharacter.java
+
+public class PhysicalCharacter implements Character {
+    protected String name;
+    protected int health;
+    protected int damage;
+    protected int armor;
+
+    public PhysicalCharacter(String name, int health, int damage, int armor) {
+        this.name = name;
+        this.health = health;
+        this.damage = damage;
+        this.armor = armor;
+    }
+
+    @Override
+    public void showCharacterInfo() {
+        System.out.println("Hero: " + name);
+        System.out.println("Health: " + health);
+        System.out.println("Damage: " + damage);
+        System.out.println("Armor: " + armor);
+    }
+
+    @Override
+    public boolean attacked(int damage) {
+        int actualDamage = damage - armor;
+        if (actualDamage > 0) {
+            health -= actualDamage;
+            return true;
+        }
+        return false;
+    }
+}
+
+// File: MagicCharacter.java
+
+public class MagicCharacter implements Character {
+    protected String name;
+    protected int health;
+    protected int damage;
+    protected int mana;
+
+    public MagicCharacter(String name, int health, int damage, int mana) {
+        this.name = name;
+        this.health = health;
+        this.damage = damage;
+        this.mana = mana;
+    }
+
+    @Override
+    public void showCharacterInfo() {
+        System.out.println("Hero: " + name);
+        System.out.println("Health: " + health);
+        System.out.println("Damage: " + damage);
+        System.out.println("Mana: " + mana);
+    }
+
+    @Override
+    public boolean attacked(int damage) {
+        health -= damage;
+        return true;
+    }
+}
+
+// File: DragonKnight.java
+
+public class DragonKnight extends PhysicalCharacter {
+    private int dragonFormAttack;
+
+    public DragonKnight() {
+        super("Dragon Knight", 1800, 95, 50);
+        this.dragonFormAttack = 0;
+    }
+
+    public void skill() {
+        dragonFormAttack = 2;
+    }
+
+    @Override
+    public void showCharacterInfo() {
+        super.showCharacterInfo();
+    }
+
+    @Override
+    public boolean attacked(int damage) {
+        if (dragonFormAttack > 0) {
+            damage += 90;
+            dragonFormAttack--;
+        }
+        return super.attacked(damage);
+    }
+}
+
+// File: LegionCommander.java
+
+public class LegionCommander extends PhysicalCharacter {
+    private int kill;
+
+    public LegionCommander() {
+        super("Legion Commander", 1200, 120, 30);
+        this.kill = 0;
+    }
+
+    public boolean skill(Character enemy) {
+        while (health > 0 && enemy.attacked(damage)) {
+            attacked(((PhysicalCharacter) enemy).damage);
+        }
+        if (health <= 0) {
+            return false;
+        } else {
+            kill++;
+            damage += 10 * kill;
+            return true;
+        }
+    }
+
+    @Override
+    public void showCharacterInfo() {
+        super.showCharacterInfo();
+    }
+
+    @Override
+    public boolean attacked(int damage) {
+        return super.attacked(damage);
+    }
+}
+
+// File: Lina.java
+
+public class Lina extends MagicCharacter {
+    public Lina() {
+        super("Lina", 800, 70, 120);
+    }
+
+    public void skill(Character enemy) {
+        if (mana >= 60) {
+            enemy.attacked(600);
+            mana -= 60;
+        }
+    }
+
+    @Override
+    public void showCharacterInfo() {
+        super.showCharacterInfo();
+    }
+
+    @Override
+    public boolean attacked(int damage) {
+        boolean result = super.attacked(damage);
+        if (!result && health <= 0) {
+            mana += 45;
+        }
+        return result;
+    }
+}
