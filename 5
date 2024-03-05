@@ -1,0 +1,110 @@
+// Interface NoTargetSkill
+public interface NoTargetSkill {
+    void skill();
+}
+
+// Abstract class Character
+public abstract class Character {
+    protected String name;
+    protected int health;
+    protected int armor;
+
+    public Character(String name, int health, int armor) {
+        this.name = name;
+        this.health = health;
+        this.armor = armor;
+    }
+
+    public void showCharacterInfo() {
+        System.out.println("Name: " + name);
+        System.out.println("Health: " + health);
+        System.out.println("Armor: " + armor);
+    }
+
+    public void attacked(int damage) {
+        int finalDamage = damage - armor;
+        if (finalDamage < 0) {
+            finalDamage = 0;
+        }
+        health -= finalDamage;
+    }
+
+    public boolean isAlive() {
+        return health > 0;
+    }
+}
+
+// Class PhysicalCharacter
+public class PhysicalCharacter implements NoTargetSkill {
+    public PhysicalCharacter(String name, int health, int armor) {
+        super(name, health, armor);
+    }
+
+    @Override
+    public void skill() {
+        // Implementasi skill untuk PhysicalCharacter
+    }
+}
+
+// Class DragonKnight
+public class DragonKnight extends Character {
+    private int dragonFormAttack;
+
+    public DragonKnight() {
+        super("DragonKnight0", 100, 20);
+        this.dragonFormAttack = 50;
+    }
+
+    @Override
+    public void showCharacterInfo() {
+        super.showCharacterInfo();
+        System.out.println("Dragon Form Attack: " + dragonFormAttack);
+    }
+
+    public void attack(Character target) {
+        if (isAlive()) {
+            target.attacked(dragonFormAttack);
+            System.out.println(name + " attacked " + target.name + " for " + dragonFormAttack + " damage.");
+        } else {
+            System.out.println(name + " is dead.");
+        }
+    }
+
+    public void dragonForm() {
+        // Implementasi dragonForm untuk DragonKnight
+    }
+
+    public void kill() {
+        // Implementasi kill untuk DragonKnight
+    }
+}
+
+// Class LegionCommander
+public class LegionCommander extends Character {
+    public LegionCommander() {
+        super("LegionCommander", 120, 15);
+    }
+
+    public void die() {
+        // Implementasi die untuk LegionCommander
+    }
+
+    public void imAttacked(int damage) {
+        // Implementasi imAttacked untuk LegionCommander
+    }
+
+    public void attack(Character target) {
+        if (isAlive()) {
+            int attackDamage = 10 + (int) (Math.random() * 11); // Random attack damage between 10 and 20
+            target.attacked(attackDamage);
+            System.out.println(name + " attacked " + target.name + " for " + attackDamage + " damage.");
+        } else {
+            System.out.println(name + " is dead.");
+        }
+    }
+
+    public boolean skill(Character target) {
+        // Implementasi skill untuk LegionCommander
+        return false;
+    }
+}
