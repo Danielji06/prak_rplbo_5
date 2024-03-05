@@ -1,0 +1,93 @@
+// NoTargetSkill Interface
+public interface NoTargetSkill {
+    void skill();
+}
+
+// TargetSkill Interface
+public interface TargetSkill {
+    boolean skill(Character character);
+}
+
+// Character Interface
+public interface Character {
+    void attacked(int damage);
+    void showCharacterInfo();
+}
+
+// PhysicalCharacter Abstract Class
+public abstract class PhysicalCharacter implements Character {
+    protected String name;
+    protected int health;
+    protected int armor;
+
+    public PhysicalCharacter(String name, int health, int armor) {
+        this.name = name;
+        this.health = health;
+        this.armor = armor;
+    }
+
+    public void attacked(int damage) {
+        int finalDamage = damage - armor;
+        if (finalDamage < 0) {
+            finalDamage = 0;
+        }
+        health -= finalDamage;
+    }
+
+    public void showCharacterInfo() {
+        System.out.println("Name: " + name);
+        System.out.println("Health: " + health);
+        System.out.println("Armor: " + armor);
+    }
+}
+
+// DragonKnight Class
+public class DragonKnight extends PhysicalCharacter {
+    private boolean dragonForm;
+    private int dragonFormAttack;
+
+    public DragonKnight(String name, int health, int armor) {
+        super(name, health, armor);
+        this.dragonForm = false;
+        this.dragonFormAttack = 10;
+    }
+
+    public void dragonForm() {
+        dragonForm = true;
+    }
+
+    public void normalForm() {
+        dragonForm = false;
+    }
+
+    public void attack(Character character) {
+        if (dragonForm) {
+            character.attacked(dragonFormAttack);
+        } else {
+            character.attacked(5);
+        }
+    }
+
+    public void skill(Character character) {
+        if (dragonForm) {
+            character.attacked(dragonFormAttack * 2);
+        } else {
+            character.attacked(5);
+        }
+    }
+
+    public void showCharacterInfo() {
+        super.showCharacterInfo();
+        System.out.println("Dragon Form: " + dragonForm);
+    }
+}
+
+// MagicCharacter Abstract Class
+public abstract class MagicCharacter implements Character {
+    protected String name;
+    protected int health;
+    protected int mana;
+
+    public MagicCharacter(String name, int health, int mana) {
+        this.name = name;
+        this.health = health;
